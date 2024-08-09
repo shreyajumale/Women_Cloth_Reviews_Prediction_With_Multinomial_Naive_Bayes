@@ -1,0 +1,1 @@
+# Women_Cloth_Reviews_Prediction_With_Multinomial_Naive_Bayes
