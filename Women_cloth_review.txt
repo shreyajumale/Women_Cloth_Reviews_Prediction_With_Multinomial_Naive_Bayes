@@ -1,0 +1,49 @@
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report
+
+# Example dataset
+data = {
+    'review': [
+        'I love this dress, it fits perfectly!',
+        'The material is cheap and not as described.',
+        'Great value for money, very satisfied.',
+        'The fit was awful and the color was off.',
+        'Excellent quality, will buy again!'
+    ],
+    'label': ['positive', 'negative', 'positive', 'negative', 'positive']
+}
+
+df = pd.DataFrame(data)
+
+# Split data into features and labels
+X = df['review']
+y = df['label']
+
+# Vectorize the text data
+vectorizer = TfidfVectorizer()
+X_vectorized = vectorizer.fit_transform(X)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_vectorized, y, test_size=0.3, random_state=42)
+
+# Train the Multinomial Naive Bayes classifier
+model = MultinomialNB()
+model.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+print(classification_report(y_test, y_pred))
+
+# Predict new reviews
+new_reviews = [
+    'This blouse is beautiful and fits well.',
+    'I am disappointed with the quality of the fabric.'
+]
+new_reviews_vectorized = vectorizer.transform(new_reviews)
+predictions = model.predict(new_reviews_vectorized)
+print(predictions)
